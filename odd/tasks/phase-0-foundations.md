@@ -22,7 +22,7 @@ Supuestos (por confirmar):
 |---|---|---|---|---|---|---|
 | T1 | S1 | api | Adaptar la plantilla a LifeForge (AGENTS, docs, puerto 5433) y suite en verde | inline | hecha | api db4cfef |
 | T2 | S1 | api, app | CI de lint y tests en ambos repos | inline | hecha (sin ejecutar en GitHub: no hay remoto) | api 6cf3669, app 6fee5ea |
-| T3 | S5 | docs | Confirmar la regla de conflictos con el dueño | inline | hecha | ver commit |
+| T3 | S5 | docs | Confirmar la regla de conflictos con el dueño | inline | hecha | app 01da319 |
 | T4 | S2 | app | Base de la app: Riverpod, router, tema Forja, login contra la API | inline | pendiente | |
 | T5 | S3, S5 | api | Recurso `areas` sincronizable (UUID del cliente, `updated_at`, push/pull) | inline | pendiente | |
 | T6 | S3, S6 | app | Drift + cola de sincronización con `Area` de punta a punta | inline | pendiente | |
