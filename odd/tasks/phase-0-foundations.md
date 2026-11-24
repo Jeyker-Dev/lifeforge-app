@@ -23,7 +23,7 @@ Supuestos (por confirmar):
 | T1 | S1 | api | Adaptar la plantilla a LifeForge (AGENTS, docs, puerto 5433) y suite en verde | inline | hecha | api db4cfef |
 | T2 | S1 | api, app | CI de lint y tests en ambos repos | inline | hecha (sin ejecutar en GitHub: no hay remoto) | api 6cf3669, app 6fee5ea |
 | T3 | S5 | docs | Confirmar la regla de conflictos con el dueño | inline | hecha | app 01da319 |
-| T4 | S2 | app | Base de la app: Riverpod, router, tema Forja, login contra la API | inline | pendiente | |
+| T4 | S2 | app | Base de la app: Riverpod, router, tema Forja, login contra la API | inline | hecha | app f38e8b6, 781b819 |
 | T5 | S3, S5 | api | Recurso `areas` sincronizable (UUID del cliente, `updated_at`, push/pull) | inline | pendiente | |
 | T6 | S3, S6 | app | Drift + cola de sincronización con `Area` de punta a punta | inline | pendiente | |
 | T7 | S4 | api | Deploy en el VPS con Caddy y backups (requiere autorización remota) | inline | pendiente | |
@@ -38,3 +38,4 @@ Supuestos (por confirmar):
 - L6 (T2): workflows `ci.yml` en ambos repos. Pasos verificados localmente: API (ruff format, ruff check, mypy, 74 tests) y app (dart format, flutter analyze, flutter test). No se ejecutaron en GitHub porque los repos no tienen remoto. Riesgo: item 5 (CI); la verificación local cubre los comandos, no el runner. Siguiente: T3 (regla de conflictos).
 - L7 (2026-11-23, T3): el dueño aceptó la regla propuesta ("Sí, aceptar"): gana la última edición por `updated_at`, los registros de tiempo solo se agregan y los borrados son lógicos (`deleted_at`). Registrada en ADR-002. Siguiente: T4, que requiere confirmar A1 (registro público o alta por CLI).
 - L8 (2026-11-23, antes de T4): el dueño eligió "Alta por CLI" frente a registro público en la app.
+- L9 (T4): base de la app con login, 21 tests (refresher single-flight, interceptor, controller y flujo de login), `flutter analyze` limpio y APK debug compilado. Riesgo: items 2 (tokens) y 4 (concurrencia del refresh); verificador independiente sin bloqueantes. Se corrigió su advertencia sobre el orden de guardado (781b819). Advertencias aceptadas: el build profile no permite HTTP sin cifrar; un 422/5xx en login se muestra como error de red. Sin probar: login real contra la API corriendo. `google_fonts` se quitó; Space Grotesk e Inter se empaquetarán como assets. Siguiente: T5 (recurso `areas` en la API).
