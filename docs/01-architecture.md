@@ -49,13 +49,13 @@ lib/
 1. La app escribe primero en Drift y encola el cambio en `core/sync`.
 2. Con conexión, la cola envía los cambios a la API; la API responde con el estado canónico.
 3. La app actualiza Drift con la respuesta del servidor.
-4. Conflictos: gana la versión del servidor, salvo los registros de tiempo, que solo se agregan y nunca se sobrescriben (por confirmar).
+4. Conflictos: gana la última edición según `updated_at`; los registros de tiempo solo se agregan y nunca se sobrescriben; los borrados son lógicos (`deleted_at`). Ver [ADR-002](decisions/ADR-002-sync-conflict-rule.md).
 
 ## Convenciones críticas
 
 - `domain/` es Dart puro: no importa Flutter, Drift ni HTTP.
 - La UI nunca llama a la API directamente: lee de Drift mediante repositorios.
-- Toda entidad sincronizable tiene un id generado en el cliente (UUID) y `updated_at`.
+- Toda entidad sincronizable tiene un id generado en el cliente (UUID), `updated_at` y `deleted_at`.
 - Las notificaciones se reprograman desde los datos locales, no desde el servidor.
 
 ## Mapa de rutas
@@ -67,3 +67,4 @@ Por definir junto con el roadmap.
 | ADR | Decisión |
 |---|---|
 | [ADR-001](decisions/ADR-001-api-from-day-one.md) | Backend con API desde el MVP, con la app móvil offline-first. |
+| [ADR-002](decisions/ADR-002-sync-conflict-rule.md) | Gana la última edición; los registros de tiempo solo se agregan; borrados lógicos. |
