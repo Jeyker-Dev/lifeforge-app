@@ -12,7 +12,7 @@
 Objetivo: una app vacía que inicia sesión, guarda un dato offline y lo sincroniza con la API desplegada.
 
 - Repos `lifeforge` (Flutter) y `lifeforge-api` (FastAPI + PostgreSQL) con CI de lint y tests.
-- Auth: registro e inicio de sesión con JWT y refresh token rotativo.
+- Auth: inicio de sesión con JWT (alta del usuario por CLI) y refresh token rotativo.
 - Base Drift, cola de sincronización y entidad de prueba sincronizada de punta a punta.
 - Deploy de la API en el VPS detrás de Caddy, con backups de PostgreSQL.
 - Confirmar la regla de conflictos de sincronización (ver `01-architecture.md`).

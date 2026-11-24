@@ -6,14 +6,14 @@ Ramas: `feat/phase-0` en `lifeforge` y en `lifeforge-api`. Entrega: `ask-on-risk
 ## Specs
 
 - S1. Roadmap, Fase 0: "Repos `lifeforge` (Flutter) y `lifeforge-api` (FastAPI + PostgreSQL) con CI de lint y tests."
-- S2. Roadmap, Fase 0: "Auth: registro e inicio de sesión con JWT y refresh token rotativo."
+- S2. Roadmap, Fase 0: "Auth: registro e inicio de sesión con JWT y refresh token rotativo." Ajustado por L8: alta por CLI, la app solo hace inicio de sesión.
 - S3. Roadmap, Fase 0: "Base Drift, cola de sincronización y entidad de prueba sincronizada de punta a punta."
 - S4. Roadmap, Fase 0: "Deploy de la API en el VPS detrás de Caddy, con backups de PostgreSQL."
 - S5. Roadmap, Fase 0: "Confirmar la regla de conflictos de sincronización (ver `01-architecture.md`)."
 - S6. Criterio de cierre: "se crea un registro sin conexión en el celular y aparece en la base del servidor al recuperar la red."
 
 Supuestos (por confirmar):
-- A1. Un solo usuario: el alta se hace por CLI (como en el starter kit), sin registro público. Contradice "registro" de S2; se pregunta antes de T4.
+- A1. Confirmado (L8): un solo usuario, alta por CLI; la app solo tiene login. Reemplaza "registro" de S2.
 - A2. La entidad de prueba de S3 es `Area` (área de vida), que la Fase 1 necesita igual.
 
 ## Tasks
@@ -37,3 +37,4 @@ Supuestos (por confirmar):
 - L5 (T1): cerrada. Con `JWT_SECRET` en `.env`, `docker compose up -d --build --wait api` migra hasta `2e215cbe92c7 (head)` y `GET /health` responde `{"status":"ok"}`. Las migraciones corren dentro del contenedor (`DATABASE_URL` usa el host `db`). El puerto sigue en 5432; cambiar a 5433 solo si se levanta junto con ahorra-api. Siguiente: T2 (CI).
 - L6 (T2): workflows `ci.yml` en ambos repos. Pasos verificados localmente: API (ruff format, ruff check, mypy, 74 tests) y app (dart format, flutter analyze, flutter test). No se ejecutaron en GitHub porque los repos no tienen remoto. Riesgo: item 5 (CI); la verificación local cubre los comandos, no el runner. Siguiente: T3 (regla de conflictos).
 - L7 (2026-11-23, T3): el dueño aceptó la regla propuesta ("Sí, aceptar"): gana la última edición por `updated_at`, los registros de tiempo solo se agregan y los borrados son lógicos (`deleted_at`). Registrada en ADR-002. Siguiente: T4, que requiere confirmar A1 (registro público o alta por CLI).
+- L8 (2026-11-23, antes de T4): el dueño eligió "Alta por CLI" frente a registro público en la app.
