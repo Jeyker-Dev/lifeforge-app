@@ -24,7 +24,7 @@ Supuestos (por confirmar):
 | T2 | S1 | api, app | CI de lint y tests en ambos repos | inline | hecha (sin ejecutar en GitHub: no hay remoto) | api 6cf3669, app 6fee5ea |
 | T3 | S5 | docs | Confirmar la regla de conflictos con el dueño | inline | hecha | app 01da319 |
 | T4 | S2 | app | Base de la app: Riverpod, router, tema Forja, login contra la API | inline | hecha | app f38e8b6, 781b819 |
-| T5 | S3, S5 | api | Recurso `areas` sincronizable (UUID del cliente, `updated_at`, push/pull) | inline | pendiente | |
+| T5 | S3, S5 | api | Recurso `areas` sincronizable (UUID del cliente, `updated_at`, push/pull) | inline | hecha | api c33b673 |
 | T6 | S3, S6 | app | Drift + cola de sincronización con `Area` de punta a punta | inline | pendiente | |
 | T7 | S4 | api | Deploy en el VPS con Caddy y backups (requiere autorización remota) | inline | pendiente | |
 
@@ -39,3 +39,4 @@ Supuestos (por confirmar):
 - L7 (2026-11-23, T3): el dueño aceptó la regla propuesta ("Sí, aceptar"): gana la última edición por `updated_at`, los registros de tiempo solo se agregan y los borrados son lógicos (`deleted_at`). Registrada en ADR-002. Siguiente: T4, que requiere confirmar A1 (registro público o alta por CLI).
 - L8 (2026-11-23, antes de T4): el dueño eligió "Alta por CLI" frente a registro público en la app.
 - L9 (T4): base de la app con login, 21 tests (refresher single-flight, interceptor, controller y flujo de login), `flutter analyze` limpio y APK debug compilado. Riesgo: items 2 (tokens) y 4 (concurrencia del refresh); verificador independiente sin bloqueantes. Se corrigió su advertencia sobre el orden de guardado (781b819). Advertencias aceptadas: el build profile no permite HTTP sin cifrar; un 422/5xx en login se muestra como error de red. Sin probar: login real contra la API corriendo. `google_fonts` se quitó; Space Grotesk e Inter se empaquetarán como assets. Siguiente: T5 (recurso `areas` en la API).
+- L10 (T5): `PUT /areas/{id}` (upsert, gana el `updated_at` más nuevo, empate conserva lo guardado) y `GET /areas?since=` (cursor por `server_updated_at` del servidor, incluye borrados). RED observado (módulo inexistente) y luego 91 tests en verde (17 nuevos: 4 unitarios de la regla, 13 de integración con aislamiento entre usuarios, auth y validación), ruff y mypy limpios. Migración `d69c930be09c` revisada. Riesgo: item 4 (bloqueo `FOR UPDATE` al editar); queda un choque posible en dos altas simultáneas del mismo id (500, lo resuelve el reintento). El verificador independiente se corre al final de la feature, junto con T6. Siguiente: T6 (Drift y cola de sync en la app).
