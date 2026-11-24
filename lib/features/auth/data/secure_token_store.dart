@@ -20,10 +20,13 @@ class SecureTokenStore implements TokenStore {
     return AuthTokens(accessToken: access, refreshToken: refresh);
   }
 
+  /// Writes the refresh token first: if the app dies between the two
+  /// writes, the stale access token just triggers a refresh with the
+  /// already-rotated refresh token instead of reusing a revoked one.
   @override
   Future<void> save(AuthTokens tokens) async {
-    await _storage.write(key: _accessKey, value: tokens.accessToken);
     await _storage.write(key: _refreshKey, value: tokens.refreshToken);
+    await _storage.write(key: _accessKey, value: tokens.accessToken);
   }
 
   @override
