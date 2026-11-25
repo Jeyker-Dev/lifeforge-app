@@ -118,17 +118,12 @@ class DriftAreaRepository implements AreaRepository {
     _onWrite?.call();
   }
 
-  Future<void> _enqueueOutbox(String entityId, String createdAt) async {
-    await _db
-        .into(_db.syncOutbox)
-        .insert(
-          SyncOutboxCompanion.insert(
-            entity: entityName,
-            entityId: entityId,
-            createdAt: createdAt,
-          ),
-        );
-  }
+  Future<void> _enqueueOutbox(String entityId, String createdAt) =>
+      _db.enqueueOutbox(
+        entity: entityName,
+        entityId: entityId,
+        createdAt: createdAt,
+      );
 
   Area _rowToArea(QueryRow row) {
     final deletedAt = row.readNullable<String>('deleted_at');

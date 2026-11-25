@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
 
+import '../../../core/sync/sync_exceptions.dart';
+
+export '../../../core/sync/sync_exceptions.dart';
+
 /// Payload sent on `PUT /areas/{id}`.
 class AreaPushPayload {
   const AreaPushPayload({
@@ -74,18 +78,6 @@ class AreasPullResponse {
   final String? cursor;
 }
 
-/// The server could not be reached or returned a 5xx response.
-class SyncNetworkException implements Exception {
-  const SyncNetworkException();
-}
-
-/// The server rejected the request with a 4xx status code.
-class SyncClientException implements Exception {
-  const SyncClientException(this.statusCode);
-
-  final int statusCode;
-}
-
 /// Gateway to the `/areas` endpoints on the LifeForge API.
 abstract interface class AreasRemote {
   /// Pushes a local area with `PUT /areas/{id}` and returns the version the
@@ -117,7 +109,7 @@ class HttpAreasRemote implements AreasRemote {
       );
       return RemoteArea.fromJson(response.data!);
     } on DioException catch (error) {
-      _throwMapped(error);
+      throwMappedDioSyncError(error);
     }
   }
 
@@ -130,15 +122,7 @@ class HttpAreasRemote implements AreasRemote {
       );
       return AreasPullResponse.fromJson(response.data!);
     } on DioException catch (error) {
-      _throwMapped(error);
+      throwMappedDioSyncError(error);
     }
-  }
-
-  Never _throwMapped(DioException error) {
-    final code = error.response?.statusCode;
-    if (code != null && code >= 400 && code < 500) {
-      throw SyncClientException(code);
-    }
-    throw const SyncNetworkException();
   }
 }
