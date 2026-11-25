@@ -13,6 +13,7 @@ import '../../features/goals/data/drift_goal_action_repository.dart';
 import '../../features/goals/data/drift_goal_repository.dart';
 import '../../features/goals/data/goal_actions_remote.dart';
 import '../../features/goals/data/goals_remote.dart';
+import '../../features/goals/domain/goal.dart';
 import '../../features/goals/domain/goal_action_repository.dart';
 import '../../features/goals/domain/goal_repository.dart';
 import '../db/database_provider.dart';
@@ -63,6 +64,10 @@ final goalActionRepositoryProvider = Provider<GoalActionRepository>((ref) {
 
 final areasStreamProvider = StreamProvider<List<Area>>(
   (ref) => ref.watch(areaRepositoryProvider).watchAll(),
+);
+
+final goalsStreamProvider = StreamProvider<List<Goal>>(
+  (ref) => ref.watch(goalRepositoryProvider).watchAll(),
 );
 
 /// Emits connectivity transitions from [Connectivity.onConnectivityChanged].

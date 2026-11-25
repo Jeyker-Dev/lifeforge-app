@@ -161,6 +161,45 @@ void main() {
   );
 
   test(
+    'watchAll returns all active goals across areas and excludes soft-deleted ones',
+    () async {
+      final g1 = await goalRepo.upsert(
+        areaId: 'area-1',
+        title: 'Meta Salud',
+        metricCurrent: 1,
+        metricTarget: 5,
+        metricUnit: 'km',
+        weeklyHoursTarget: 3,
+      );
+      now = now.add(const Duration(minutes: 1));
+      final g2 = await goalRepo.upsert(
+        areaId: 'area-2',
+        title: 'Meta Carrera',
+        metricCurrent: 3,
+        metricTarget: 10,
+        metricUnit: 'entrevistas',
+        weeklyHoursTarget: 6,
+      );
+      now = now.add(const Duration(minutes: 1));
+      final g3 = await goalRepo.upsert(
+        areaId: 'area-1',
+        title: 'Meta borrada',
+        metricCurrent: 0,
+        metricTarget: 2,
+        metricUnit: 'sesiones',
+        weeklyHoursTarget: 1,
+      );
+
+      now = now.add(const Duration(minutes: 1));
+      await goalRepo.delete(g3.id);
+
+      final watched = await goalRepo.watchAll().first;
+      expect(watched.map((g) => g.id), [g1.id, g2.id]);
+      expect(watched.every((g) => g.pendingSync), isTrue);
+    },
+  );
+
+  test(
     'delete soft-deletes the goal and cascades to active actions with separate outbox entries (A1)',
     () async {
       final goal = await goalRepo.upsert(

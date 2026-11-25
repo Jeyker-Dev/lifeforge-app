@@ -58,5 +58,40 @@ ThemeData buildForgeTheme() {
         shape: const StadiumBorder(),
       ),
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: ForgeColors.surface,
+      indicatorColor: ForgeColors.primary.withValues(alpha: 0.16),
+      iconTheme: WidgetStateProperty.resolveWith(
+        (states) => IconThemeData(
+          color: states.contains(WidgetState.selected)
+              ? ForgeColors.primary
+              : ForgeColors.onSurfaceMuted,
+        ),
+      ),
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (states) => TextStyle(
+          fontSize: 12,
+          fontWeight: states.contains(WidgetState.selected)
+              ? FontWeight.w600
+              : FontWeight.w500,
+          color: states.contains(WidgetState.selected)
+              ? ForgeColors.primary
+              : ForgeColors.onSurfaceMuted,
+        ),
+      ),
+    ),
   );
+}
+
+/// Parses a `#RRGGBB` hex string into a [Color], falling back to [fallback].
+Color parseForgeHexColor(
+  String hex, {
+  Color fallback = ForgeColors.areaHealth,
+}) {
+  final cleaned = hex.replaceFirst('#', '');
+  final value = int.tryParse(cleaned, radix: 16);
+  if (value == null || cleaned.length != 6) {
+    return fallback;
+  }
+  return Color(0xFF000000 | value);
 }

@@ -147,7 +147,7 @@ class _AreasList extends StatelessWidget {
           child: ListTile(
             leading: CircleAvatar(
               radius: 8,
-              backgroundColor: _parseHexColor(area.color),
+              backgroundColor: parseForgeHexColor(area.color),
             ),
             title: Text(
               area.name,
@@ -212,15 +212,6 @@ class _AreasList extends StatelessWidget {
       },
     );
   }
-}
-
-Color _parseHexColor(String hex) {
-  final cleaned = hex.replaceFirst('#', '');
-  final value = int.tryParse(cleaned, radix: 16);
-  if (value == null || cleaned.length != 6) {
-    return ForgeColors.areaHealth;
-  }
-  return Color(0xFF000000 | value);
 }
 
 class _AreaNameDialog extends StatefulWidget {
@@ -331,7 +322,7 @@ class _ChangeColorDialogState extends State<_ChangeColorDialog> {
                 ),
                 leading: CircleAvatar(
                   radius: 12,
-                  backgroundColor: _parseHexColor(option.hex),
+                  backgroundColor: parseForgeHexColor(option.hex),
                 ),
                 title: Text(
                   option.label,

@@ -5,6 +5,9 @@ import 'goal.dart';
 /// Every local write stamps `updated_at` in UTC and records an outbox entry
 /// so the sync service can push the change to the server.
 abstract interface class GoalRepository {
+  /// Watches all active (non-deleted) goals across all areas.
+  Stream<List<Goal>> watchAll();
+
   /// Watches all active (non-deleted) goals belonging to [areaId].
   Stream<List<Goal>> watchByArea(String areaId);
 

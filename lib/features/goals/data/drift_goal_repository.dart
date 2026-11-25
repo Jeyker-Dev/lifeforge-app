@@ -29,7 +29,19 @@ class DriftGoalRepository implements GoalRepository {
   DateTime _nowUtc() => _clock().toUtc();
 
   @override
-  Stream<List<Goal>> watchByArea(String areaId) {
+  Stream<List<Goal>> watchAll() =>
+      _watchWhere('g.deleted_at IS NULL', [Variable.withString(entityName)]);
+
+  @override
+  Stream<List<Goal>> watchByArea(String areaId) => _watchWhere(
+    'g.area_id = ? AND g.deleted_at IS NULL',
+    [Variable.withString(entityName), Variable.withString(areaId)],
+  );
+
+  Stream<List<Goal>> _watchWhere(
+    String whereClause,
+    List<Variable<Object>> variables,
+  ) {
     final query = _db.customSelect(
       '''
       SELECT g.id,
@@ -50,10 +62,10 @@ class DriftGoalRepository implements GoalRepository {
                WHERE o.entity = ? AND o.entity_id = g.id
              ) AS pending_sync
       FROM goals g
-      WHERE g.area_id = ? AND g.deleted_at IS NULL
+      WHERE $whereClause
       ORDER BY g.updated_at ASC, g.id ASC
       ''',
-      variables: [Variable.withString(entityName), Variable.withString(areaId)],
+      variables: variables,
       readsFrom: {_db.goals, _db.syncOutbox},
     );
     return query.watch().map((rows) => rows.map(_rowToGoal).toList());
