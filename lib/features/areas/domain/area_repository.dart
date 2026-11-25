@@ -14,6 +14,9 @@ abstract interface class AreaRepository {
   /// Renames an existing area.
   Future<void> rename({required String id, required String name});
 
+  /// Changes the hex color of an existing area.
+  Future<void> changeColor({required String id, required String color});
+
   /// Soft-deletes an area by setting `deleted_at` and `updated_at`.
   Future<void> delete(String id);
 }

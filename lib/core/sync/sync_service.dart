@@ -2,11 +2,15 @@ import 'package:drift/drift.dart';
 
 import '../../features/areas/data/areas_remote.dart';
 import '../../features/areas/data/drift_area_repository.dart';
+import '../../features/areas/domain/area_defaults.dart';
+import '../../features/areas/domain/area_repository.dart';
 import '../../features/goals/data/drift_goal_action_repository.dart';
 import '../../features/goals/data/drift_goal_repository.dart';
 import '../../features/goals/data/goal_actions_remote.dart';
 import '../../features/goals/data/goals_remote.dart';
 import '../db/app_database.dart';
+
+enum _PullOutcome { succeeded, clientError, networkError }
 
 /// Synchronizes local areas, goals, and goal actions with the LifeForge API
 /// using a push-then-pull flow.
@@ -18,8 +22,10 @@ class SyncService {
     this._areasRemote, {
     GoalsRemote? goalsRemote,
     GoalActionsRemote? goalActionsRemote,
+    AreaRepository? areaRepository,
   }) : _goalsRemote = goalsRemote,
-       _goalActionsRemote = goalActionsRemote;
+       _goalActionsRemote = goalActionsRemote,
+       _areaRepository = areaRepository ?? DriftAreaRepository(_db);
 
   static const _areaEntity = DriftAreaRepository.entityName;
   static const _goalEntity = DriftGoalRepository.entityName;
@@ -29,6 +35,7 @@ class SyncService {
   final AreasRemote _areasRemote;
   final GoalsRemote? _goalsRemote;
   final GoalActionsRemote? _goalActionsRemote;
+  final AreaRepository _areaRepository;
   Future<void>? _inFlight;
 
   /// Pushes queued local changes and pulls remote changes in order:
@@ -45,8 +52,14 @@ class SyncService {
     if (!await _pushGoals()) return;
     if (!await _pushGoalActions()) return;
 
-    if (!await _pullAreas()) return;
-    if (!await _pullGoals()) return;
+    final areaPull = await _pullAreas();
+    if (areaPull == _PullOutcome.networkError) return;
+    if (areaPull == _PullOutcome.succeeded) {
+      final seeded = await _seedDefaultAreasIfNeeded();
+      if (seeded && !await _pushAreas()) return;
+    }
+
+    if (await _pullGoals() == _PullOutcome.networkError) return;
     await _pullGoalActions();
   }
 
@@ -120,7 +133,7 @@ class SyncService {
     );
   }
 
-  Future<bool> _pullAreas() => _pullEntity<RemoteArea>(
+  Future<_PullOutcome> _pullAreas() => _pullEntity<RemoteArea>(
     entity: _areaEntity,
     pullRemote: (since) async {
       final response = await _areasRemote.pullAreas(since: since);
@@ -137,9 +150,25 @@ class SyncService {
     upsertRemote: _upsertRemoteArea,
   );
 
-  Future<bool> _pullGoals() {
+  /// Seeds the 5 default areas (A3) only when no areas exist at all (including
+  /// soft-deleted rows) after a successful pull confirmed the server is empty.
+  Future<bool> _seedDefaultAreasIfNeeded() async {
+    final countExp = _db.areas.id.count();
+    final countRow = await (_db.selectOnly(
+      _db.areas,
+    )..addColumns([countExp])).getSingle();
+    final existingCount = countRow.read(countExp) ?? 0;
+    if (existingCount > 0) return false;
+
+    for (final spec in defaultLifeAreas) {
+      await _areaRepository.create(name: spec.name, color: spec.color);
+    }
+    return true;
+  }
+
+  Future<_PullOutcome> _pullGoals() {
     final remote = _goalsRemote;
-    if (remote == null) return Future.value(true);
+    if (remote == null) return Future.value(_PullOutcome.succeeded);
     return _pullEntity<RemoteGoal>(
       entity: _goalEntity,
       pullRemote: (since) async {
@@ -158,9 +187,9 @@ class SyncService {
     );
   }
 
-  Future<bool> _pullGoalActions() {
+  Future<_PullOutcome> _pullGoalActions() {
     final remote = _goalActionsRemote;
-    if (remote == null) return Future.value(true);
+    if (remote == null) return Future.value(_PullOutcome.succeeded);
     return _pullEntity<RemoteGoalAction>(
       entity: _goalActionEntity,
       pullRemote: (since) async {
@@ -222,7 +251,7 @@ class SyncService {
   /// Pulls remote changes for [entity] since its stored cursor using
   /// last-edit-wins (`updatedAt`): a strictly newer remote timestamp overwrites,
   /// while an older timestamp or tie keeps the local row.
-  Future<bool> _pullEntity<TRemote>({
+  Future<_PullOutcome> _pullEntity<TRemote>({
     required String entity,
     required Future<({List<TRemote> items, String? cursor})> Function(
       String? since,
@@ -241,9 +270,9 @@ class SyncService {
     try {
       response = await pullRemote(cursorRow?.cursor);
     } on SyncNetworkException {
-      return false;
+      return _PullOutcome.networkError;
     } on SyncClientException {
-      return true;
+      return _PullOutcome.clientError;
     }
 
     await _db.transaction(() async {
@@ -279,7 +308,7 @@ class SyncService {
             );
       }
     });
-    return true;
+    return _PullOutcome.succeeded;
   }
 
   Future<void> _upsertRemoteArea(RemoteArea area) async {

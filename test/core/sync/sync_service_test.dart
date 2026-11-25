@@ -626,4 +626,105 @@ void main() {
       },
     );
   });
+
+  group('default life areas seeding (A3)', () {
+    late SyncService syncWithRepo;
+
+    setUp(() {
+      syncWithRepo = SyncService(db, remote, areaRepository: repo);
+    });
+
+    test(
+      'creates the 5 default areas in order after an empty successful pull',
+      () async {
+        await syncWithRepo.syncAll();
+
+        final areas = await repo.watchAll().first;
+        expect(areas.map((a) => (a.name, a.color, a.position)).toList(), [
+          ('Salud', '#E07A5F', 0),
+          ('Carrera', '#D4A373', 1),
+          ('Finanzas', '#81B29A', 2),
+          ('Relaciones', '#D98C9B', 3),
+          ('Ocio', '#A88BD9', 4),
+        ]);
+        expect(areas.every((a) => !a.pendingSync), isTrue);
+        expect(remote.pushed, hasLength(5));
+        expect(remote.serverAreas, hasLength(5));
+      },
+    );
+
+    test('does not create defaults when local areas already exist', () async {
+      await repo.create(name: 'Personalizada', color: '#E07A5F');
+
+      await syncWithRepo.syncAll();
+
+      final areas = await repo.watchAll().first;
+      expect(areas.map((a) => a.name), ['Personalizada']);
+    });
+
+    test('does not create defaults when remote pull returns areas', () async {
+      remote.pullResponseAreas = [
+        const RemoteArea(
+          id: 'remote-1',
+          name: 'Proyecto',
+          color: '#D4A373',
+          position: 0,
+          updatedAt: '2026-11-24T12:00:00.000Z',
+          deletedAt: null,
+          serverUpdatedAt: '2026-11-24T12:00:01.000Z',
+        ),
+      ];
+
+      await syncWithRepo.syncAll();
+
+      final areas = await repo.watchAll().first;
+      expect(areas.map((a) => a.name), ['Proyecto']);
+    });
+
+    test(
+      'does not create defaults when the pull fails with network or client error',
+      () async {
+        remote.pullError = const SyncNetworkException();
+        await syncWithRepo.syncAll();
+        expect(await db.select(db.areas).get(), isEmpty);
+
+        remote.pullError = const SyncClientException(401);
+        await syncWithRepo.syncAll();
+        expect(await db.select(db.areas).get(), isEmpty);
+      },
+    );
+
+    test(
+      'does not create defaults when the only remote areas are soft-deleted',
+      () async {
+        remote.pullResponseAreas = [
+          const RemoteArea(
+            id: 'deleted-1',
+            name: 'Salud',
+            color: '#E07A5F',
+            position: 0,
+            updatedAt: '2026-11-24T12:00:00.000Z',
+            deletedAt: '2026-11-24T12:00:00.000Z',
+            serverUpdatedAt: '2026-11-24T12:00:01.000Z',
+          ),
+        ];
+
+        await syncWithRepo.syncAll();
+
+        expect(await repo.watchAll().first, isEmpty);
+        final allRows = await db.select(db.areas).get();
+        expect(allRows, hasLength(1));
+        expect(allRows.single.id, 'deleted-1');
+      },
+    );
+
+    test('running sync twice does not duplicate default areas', () async {
+      await syncWithRepo.syncAll();
+      await syncWithRepo.syncAll();
+
+      final areas = await repo.watchAll().first;
+      expect(areas, hasLength(5));
+      expect(remote.pushed, hasLength(5));
+    });
+  });
 }

@@ -79,4 +79,25 @@ void main() {
       expect(deletedRow.updatedAt, now.toIso8601String());
     },
   );
+
+  test(
+    'changeColor updates color, stamps UTC updated_at and enqueues outbox entry',
+    () async {
+      final created = await repo.create(name: 'Salud', color: '#E07A5F');
+      now = now.add(const Duration(minutes: 5));
+
+      await repo.changeColor(id: created.id, color: '#81B29A');
+
+      final updated = (await repo.watchAll().first).single;
+      expect(updated.color, '#81B29A');
+      expect(updated.updatedAt, now);
+      expect(updated.pendingSync, isTrue);
+
+      final outbox = await db.select(db.syncOutbox).get();
+      expect(outbox, hasLength(2));
+      expect(outbox.last.entity, 'area');
+      expect(outbox.last.entityId, created.id);
+      expect(outbox.last.createdAt, now.toIso8601String());
+    },
+  );
 }
