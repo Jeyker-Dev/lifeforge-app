@@ -1,3 +1,12 @@
+/// Parses a decimal number accepting both `.` and `,` as decimal separators.
+double? parseGoalNumber(String raw) {
+  final normalized = raw.trim().replaceAll(',', '.');
+  if (normalized.isEmpty) return null;
+  final parsed = double.tryParse(normalized);
+  if (parsed == null || parsed.isNaN || parsed.isInfinite) return null;
+  return parsed;
+}
+
 /// Formats a metric number, omitting `.0` for whole numbers (e.g. `3`, `2.5`).
 String formatMetricNumber(double value) {
   if (value.isNaN || value.isInfinite) return '0';

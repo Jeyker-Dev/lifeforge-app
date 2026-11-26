@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/theme.dart';
 import '../../../core/sync/providers.dart';
 import '../../areas/domain/area.dart';
+import '../domain/goal.dart';
 import 'goal_formatting.dart';
 
-/// Full-screen form to create a new goal.
+/// Full-screen form to create or edit a goal.
 class NewGoalScreen extends ConsumerStatefulWidget {
-  const NewGoalScreen({super.key, this.initialAreaId});
+  const NewGoalScreen({super.key, this.initialAreaId, this.goal});
 
   final String? initialAreaId;
+  final Goal? goal;
 
   @override
   ConsumerState<NewGoalScreen> createState() => _NewGoalScreenState();
@@ -18,21 +20,37 @@ class NewGoalScreen extends ConsumerStatefulWidget {
 
 class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _whyController = TextEditingController();
-  final _currentController = TextEditingController(text: '0');
-  final _targetController = TextEditingController();
-  final _unitController = TextEditingController();
-  final _hoursController = TextEditingController();
+  late final TextEditingController _titleController;
+  late final TextEditingController _whyController;
+  late final TextEditingController _currentController;
+  late final TextEditingController _targetController;
+  late final TextEditingController _unitController;
+  late final TextEditingController _hoursController;
 
   String? _selectedAreaId;
   DateTime? _targetDate;
   bool _saving = false;
 
+  bool get _isEditing => widget.goal != null;
+
   @override
   void initState() {
     super.initState();
-    _selectedAreaId = widget.initialAreaId;
+    final goal = widget.goal;
+    _selectedAreaId = goal?.areaId ?? widget.initialAreaId;
+    _targetDate = goal?.targetDate;
+    _titleController = TextEditingController(text: goal?.title ?? '');
+    _whyController = TextEditingController(text: goal?.why ?? '');
+    _currentController = TextEditingController(
+      text: goal == null ? '0' : formatMetricNumber(goal.metricCurrent),
+    );
+    _targetController = TextEditingController(
+      text: goal == null ? '' : formatMetricNumber(goal.metricTarget),
+    );
+    _unitController = TextEditingController(text: goal?.metricUnit ?? '');
+    _hoursController = TextEditingController(
+      text: goal == null ? '' : formatMetricNumber(goal.weeklyHoursTarget),
+    );
   }
 
   @override
@@ -44,14 +62,6 @@ class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
     _unitController.dispose();
     _hoursController.dispose();
     super.dispose();
-  }
-
-  double? _parseNumber(String raw) {
-    final normalized = raw.trim().replaceAll(',', '.');
-    if (normalized.isEmpty) return null;
-    final parsed = double.tryParse(normalized);
-    if (parsed == null || parsed.isNaN || parsed.isInfinite) return null;
-    return parsed;
   }
 
   Future<void> _pickDate() async {
@@ -80,14 +90,16 @@ class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
       await ref
           .read(goalRepositoryProvider)
           .upsert(
+            id: widget.goal?.id,
             areaId: areaId,
             title: _titleController.text.trim(),
             why: why.isEmpty ? null : why,
             targetDate: _targetDate,
-            metricCurrent: _parseNumber(_currentController.text) ?? 0,
-            metricTarget: _parseNumber(_targetController.text)!,
+            metricCurrent: parseGoalNumber(_currentController.text) ?? 0,
+            metricTarget: parseGoalNumber(_targetController.text)!,
             metricUnit: _unitController.text.trim(),
-            weeklyHoursTarget: _parseNumber(_hoursController.text)!,
+            weeklyHoursTarget: parseGoalNumber(_hoursController.text)!,
+            status: widget.goal?.status ?? GoalStatus.active,
           );
       if (mounted) Navigator.of(context).pop();
     } finally {
@@ -103,7 +115,7 @@ class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
         : null;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Nueva meta')),
+      appBar: AppBar(title: Text(_isEditing ? 'Editar meta' : 'Nueva meta')),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -184,7 +196,7 @@ class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
                         labelText: 'Avance actual',
                       ),
                       validator: (value) {
-                        final parsed = _parseNumber(value ?? '');
+                        final parsed = parseGoalNumber(value ?? '');
                         if (parsed == null || parsed < 0) {
                           return 'Ingresa 0 o mayor.';
                         }
@@ -205,7 +217,7 @@ class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
                         hintText: 'Ej. 10',
                       ),
                       validator: (value) {
-                        final parsed = _parseNumber(value ?? '');
+                        final parsed = parseGoalNumber(value ?? '');
                         if (parsed == null || parsed <= 0) {
                           return 'Debe ser mayor que 0.';
                         }
@@ -243,7 +255,7 @@ class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
                   if (trimmed.isEmpty) {
                     return 'Ingresa las horas semanales.';
                   }
-                  final parsed = _parseNumber(trimmed);
+                  final parsed = parseGoalNumber(trimmed);
                   if (parsed == null || parsed < 0) {
                     return 'Debe ser 0 o mayor.';
                   }
@@ -253,7 +265,7 @@ class _NewGoalScreenState extends ConsumerState<NewGoalScreen> {
               const SizedBox(height: 24),
               FilledButton(
                 onPressed: _saving ? null : _submit,
-                child: const Text('Guardar meta'),
+                child: Text(_isEditing ? 'Guardar cambios' : 'Guardar meta'),
               ),
             ],
           ),

@@ -5,10 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../features/auth/domain/auth.dart';
 import '../features/auth/presentation/auth_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
+import '../features/goals/presentation/goal_detail_screen.dart';
 import '../features/goals/presentation/goals_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
+  final rootNavigatorKey = GlobalKey<NavigatorState>();
+  final shellNavigatorKey = GlobalKey<NavigatorState>();
   final auth = ValueNotifier<AsyncValue<AuthStatus>>(
     ref.read(authControllerProvider),
   );
@@ -16,6 +19,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.onDispose(auth.dispose);
 
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     refreshListenable: auth,
     redirect: (context, state) {
@@ -35,6 +39,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       ShellRoute(
+        navigatorKey: shellNavigatorKey,
         builder: (context, state, child) =>
             _AppShell(location: state.matchedLocation, child: child),
         routes: [
@@ -42,6 +47,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/goals',
             builder: (context, state) => const GoalsScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                parentNavigatorKey: rootNavigatorKey,
+                builder: (context, state) =>
+                    GoalDetailScreen(goalId: state.pathParameters['id']!),
+              ),
+            ],
           ),
         ],
       ),

@@ -117,8 +117,12 @@ void main() {
       expect(find.text('30%'), findsOneWidget);
       expect(find.text('6 h por semana'), findsOneWidget);
 
-      // Tapping a card does nothing yet (T6 adds detail).
+      // Tapping a card opens its detail and back returns to the list.
       await tester.tap(find.text('Correr 10 km'));
+      await tester.pumpAndSettle();
+      expect(find.text('Registrar avance'), findsOneWidget);
+
+      await tester.pageBack();
       await tester.pumpAndSettle();
       expect(find.byType(GoalCard), findsNWidgets(2));
 

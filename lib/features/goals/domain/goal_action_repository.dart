@@ -23,6 +23,11 @@ abstract interface class GoalActionRepository {
     int? position,
   });
 
+  /// Rewrites action positions for [goalId] in [orderedIds] order within a
+  /// single transaction, stamping `updated_at` and enqueueing outbox entries
+  /// only for actions whose position changed.
+  Future<void> reorder(String goalId, List<String> orderedIds);
+
   /// Soft-deletes a goal action by setting `deleted_at` and `updated_at`.
   Future<void> delete(String id);
 }

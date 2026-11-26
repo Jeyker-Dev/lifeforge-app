@@ -8,10 +8,16 @@ import 'goal_formatting.dart';
 /// Card displaying a single [Goal] with its area label, progress metric, and
 /// weekly hours target.
 class GoalCard extends StatelessWidget {
-  const GoalCard({super.key, required this.goal, required this.area});
+  const GoalCard({
+    super.key,
+    required this.goal,
+    required this.area,
+    this.onTap,
+  });
 
   final Goal goal;
   final Area area;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,125 +31,132 @@ class GoalCard extends StatelessWidget {
         '${formatMetricNumber(goal.metricTarget)} ${goal.metricUnit}';
     final why = goal.why?.trim();
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: ForgeColors.surface,
+    return Material(
+      color: ForgeColors.surface,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: ForgeColors.outline),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: ForgeColors.outline),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(radius: 5, backgroundColor: areaColor),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  area.name,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: ForgeColors.onSurfaceMuted,
+              Row(
+                children: [
+                  CircleAvatar(radius: 5, backgroundColor: areaColor),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      area.name,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: ForgeColors.onSurfaceMuted,
+                      ),
+                    ),
                   ),
+                  if (isCompleted) const _CompletedBadge(),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                goal.title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: ForgeColors.onSurface,
                 ),
               ),
-              if (isCompleted) const _CompletedBadge(),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            goal.title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: ForgeColors.onSurface,
-            ),
-          ),
-          if (why != null && why.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            Text(
-              why,
-              style: const TextStyle(
-                fontSize: 14,
-                color: ForgeColors.onSurfaceMuted,
-              ),
-            ),
-          ],
-          if (goal.targetDate != null) ...[
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                const Icon(
-                  Icons.event_outlined,
-                  size: 16,
-                  color: ForgeColors.onSurfaceMuted,
-                ),
-                const SizedBox(width: 6),
+              if (why != null && why.isNotEmpty) ...[
+                const SizedBox(height: 4),
                 Text(
-                  'Objetivo: ${formatGoalTargetDate(goal.targetDate!)}',
+                  why,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     color: ForgeColors.onSurfaceMuted,
                   ),
                 ),
               ],
-            ),
-          ],
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  metricText,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: ForgeColors.onSurface,
+              if (goal.targetDate != null) ...[
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.event_outlined,
+                      size: 16,
+                      color: ForgeColors.onSurfaceMuted,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Objetivo: ${formatGoalTargetDate(goal.targetDate!)}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: ForgeColors.onSurfaceMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      metricText,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: ForgeColors.onSurface,
+                      ),
+                    ),
                   ),
+                  Text(
+                    '$percent%',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: accentColor,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: LinearProgressIndicator(
+                  value: ratio,
+                  minHeight: 8,
+                  backgroundColor: ForgeColors.surfaceHigh,
+                  valueColor: AlwaysStoppedAnimation<Color>(accentColor),
                 ),
               ),
-              Text(
-                '$percent%',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: accentColor,
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.schedule,
+                    size: 16,
+                    color: ForgeColors.onSurfaceMuted,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '${formatWeeklyHours(goal.weeklyHoursTarget)} por semana',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: ForgeColors.onSurfaceMuted,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: LinearProgressIndicator(
-              value: ratio,
-              minHeight: 8,
-              backgroundColor: ForgeColors.surfaceHigh,
-              valueColor: AlwaysStoppedAnimation<Color>(accentColor),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Icon(
-                Icons.schedule,
-                size: 16,
-                color: ForgeColors.onSurfaceMuted,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                '${formatWeeklyHours(goal.weeklyHoursTarget)} por semana',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: ForgeColors.onSurfaceMuted,
-                  fontFeatures: [FontFeature.tabularFigures()],
-                ),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

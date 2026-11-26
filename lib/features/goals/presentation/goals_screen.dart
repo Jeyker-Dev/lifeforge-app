@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
 import '../../../core/sync/providers.dart';
@@ -7,6 +8,7 @@ import '../../areas/domain/area.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../domain/goal.dart';
 import 'goal_card.dart';
+import 'goal_detail_screen.dart';
 import 'new_goal_screen.dart';
 
 /// Goals screen displaying goals grouped by area with area filter chips.
@@ -298,7 +300,22 @@ class _AreaGoalsSection extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         for (var i = 0; i < goals.length; i++) ...[
-          GoalCard(goal: goals[i], area: area),
+          GoalCard(
+            goal: goals[i],
+            area: area,
+            onTap: () {
+              final router = GoRouter.maybeOf(context);
+              if (router != null) {
+                router.go('/goals/${goals[i].id}');
+              } else {
+                Navigator.of(context).push<void>(
+                  MaterialPageRoute<void>(
+                    builder: (context) => GoalDetailScreen(goalId: goals[i].id),
+                  ),
+                );
+              }
+            },
+          ),
           if (i < goals.length - 1) const SizedBox(height: 12),
         ],
       ],

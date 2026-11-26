@@ -142,6 +142,50 @@ class DriftGoalActionRepository implements GoalActionRepository {
   }
 
   @override
+  Future<void> reorder(String goalId, List<String> orderedIds) async {
+    final nowIso = _nowUtc().toIso8601String();
+    var wrote = false;
+    await _db.transaction(() async {
+      final active = await (_db.select(
+        _db.goalActions,
+      )..where((t) => t.goalId.equals(goalId) & t.deletedAt.isNull())).get();
+      if (active.isEmpty) return;
+
+      final byId = {for (final row in active) row.id: row};
+      final seen = <String>{};
+      final ordered = <GoalActionRow>[];
+      for (final id in orderedIds) {
+        final row = byId[id];
+        if (row != null && seen.add(id)) {
+          ordered.add(row);
+        }
+      }
+      final remaining = active.where((r) => !seen.contains(r.id)).toList()
+        ..sort((a, b) => a.position.compareTo(b.position));
+      ordered.addAll(remaining);
+
+      for (final (index, row) in ordered.indexed) {
+        if (row.position == index) continue;
+        wrote = true;
+        await (_db.update(
+          _db.goalActions,
+        )..where((t) => t.id.equals(row.id))).write(
+          GoalActionsCompanion(
+            position: Value(index),
+            updatedAt: Value(nowIso),
+          ),
+        );
+        await _db.enqueueOutbox(
+          entity: entityName,
+          entityId: row.id,
+          createdAt: nowIso,
+        );
+      }
+    });
+    if (wrote) _onWrite?.call();
+  }
+
+  @override
   Future<void> delete(String id) async {
     final nowIso = _nowUtc().toIso8601String();
     var wrote = false;

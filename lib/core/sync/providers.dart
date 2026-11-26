@@ -14,6 +14,7 @@ import '../../features/goals/data/drift_goal_repository.dart';
 import '../../features/goals/data/goal_actions_remote.dart';
 import '../../features/goals/data/goals_remote.dart';
 import '../../features/goals/domain/goal.dart';
+import '../../features/goals/domain/goal_action.dart';
 import '../../features/goals/domain/goal_action_repository.dart';
 import '../../features/goals/domain/goal_repository.dart';
 import '../db/database_provider.dart';
@@ -69,6 +70,12 @@ final areasStreamProvider = StreamProvider<List<Area>>(
 final goalsStreamProvider = StreamProvider<List<Goal>>(
   (ref) => ref.watch(goalRepositoryProvider).watchAll(),
 );
+
+final goalActionsStreamProvider =
+    StreamProvider.family<List<GoalAction>, String>(
+      (ref, goalId) =>
+          ref.watch(goalActionRepositoryProvider).watchByGoal(goalId),
+    );
 
 /// Emits connectivity transitions from [Connectivity.onConnectivityChanged].
 final connectivityStreamProvider = StreamProvider<List<ConnectivityResult>>(

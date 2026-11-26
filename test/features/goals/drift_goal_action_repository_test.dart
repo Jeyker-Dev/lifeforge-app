@@ -104,4 +104,80 @@ void main() {
       expect(deletedRow.updatedAt, now.toIso8601String());
     },
   );
+
+  test(
+    'upsert without position appends new action after existing max position',
+    () async {
+      final first = await repo.upsert(
+        goalId: 'goal-1',
+        title: 'Paso 1',
+        kind: GoalActionKind.task,
+      );
+      final jumped = await repo.upsert(
+        goalId: 'goal-1',
+        title: 'Paso saltado',
+        kind: GoalActionKind.milestone,
+        position: 4,
+      );
+      final appended = await repo.upsert(
+        goalId: 'goal-1',
+        title: 'Paso final',
+        kind: GoalActionKind.task,
+      );
+
+      expect(first.position, 0);
+      expect(jumped.position, 4);
+      expect(appended.position, 5);
+
+      final watched = await repo.watchByGoal('goal-1').first;
+      expect(watched.map((a) => a.id), [first.id, jumped.id, appended.id]);
+    },
+  );
+
+  test(
+    'reorder rewrites positions in one transaction and enqueues only moved actions',
+    () async {
+      final a1 = await repo.upsert(
+        goalId: 'goal-1',
+        title: 'Acción 1',
+        kind: GoalActionKind.task,
+      );
+      final a2 = await repo.upsert(
+        goalId: 'goal-1',
+        title: 'Acción 2',
+        kind: GoalActionKind.task,
+      );
+      final a3 = await repo.upsert(
+        goalId: 'goal-1',
+        title: 'Acción 3',
+        kind: GoalActionKind.milestone,
+      );
+
+      await db.delete(db.syncOutbox).go();
+
+      final reorderTime = now.add(const Duration(minutes: 10));
+      now = reorderTime;
+
+      // Move a2 before a1 while leaving a3 at position 2.
+      await repo.reorder('goal-1', [a2.id, a1.id, a3.id]);
+
+      final watched = await repo.watchByGoal('goal-1').first;
+      expect(watched.map((a) => a.id), [a2.id, a1.id, a3.id]);
+      expect(watched.map((a) => a.position), [0, 1, 2]);
+      expect(watched[0].updatedAt, reorderTime);
+      expect(watched[1].updatedAt, reorderTime);
+      expect(watched[2].updatedAt, DateTime.utc(2026, 11, 25, 12));
+
+      final outbox = await db.select(db.syncOutbox).get();
+      expect(outbox, hasLength(2));
+      expect(outbox.every((e) => e.entity == 'goal_action'), isTrue);
+      expect(outbox.map((e) => e.entityId), unorderedEquals([a1.id, a2.id]));
+
+      // Reordering with identical order leaves timestamps and outbox untouched.
+      await db.delete(db.syncOutbox).go();
+      now = now.add(const Duration(minutes: 5));
+      await repo.reorder('goal-1', [a2.id, a1.id, a3.id]);
+      expect(await db.select(db.syncOutbox).get(), isEmpty);
+    },
+  );
 }
