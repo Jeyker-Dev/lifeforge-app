@@ -21,6 +21,44 @@ class Areas extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Local cache of life goals belonging to areas.
+@DataClassName('GoalRow')
+class Goals extends Table {
+  TextColumn get id => text()();
+  TextColumn get areaId => text()();
+  TextColumn get title => text()();
+  TextColumn get why => text().nullable()();
+  TextColumn get targetDate => text().nullable()();
+  RealColumn get metricCurrent => real()();
+  RealColumn get metricTarget => real()();
+  TextColumn get metricUnit => text()();
+  RealColumn get weeklyHoursTarget => real()();
+  TextColumn get status => text()();
+  TextColumn get updatedAt => text()();
+  TextColumn get deletedAt => text().nullable()();
+  TextColumn get serverUpdatedAt => text().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// Local cache of tasks and milestones inside a goal's action plan.
+@DataClassName('GoalActionRow')
+class GoalActions extends Table {
+  TextColumn get id => text()();
+  TextColumn get goalId => text()();
+  TextColumn get title => text()();
+  TextColumn get kind => text()();
+  BoolColumn get done => boolean()();
+  IntColumn get position => integer()();
+  TextColumn get updatedAt => text()();
+  TextColumn get deletedAt => text().nullable()();
+  TextColumn get serverUpdatedAt => text().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 /// Queue of entities that have local changes waiting to be pushed to the API.
 @DataClassName('SyncOutboxRow')
 class SyncOutbox extends Table {
@@ -40,13 +78,39 @@ class SyncCursors extends Table {
   Set<Column<Object>> get primaryKey => {entity};
 }
 
-@DriftDatabase(tables: [Areas, SyncOutbox, SyncCursors])
+@DriftDatabase(tables: [Areas, Goals, GoalActions, SyncOutbox, SyncCursors])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
     : super(_wrapExecutor(executor ?? _openConnection()));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(goals);
+        await m.createTable(goalActions);
+      }
+    },
+  );
+
+  /// Records a pending sync operation for [entity] and [entityId].
+  Future<void> enqueueOutbox({
+    required String entity,
+    required String entityId,
+    required String createdAt,
+  }) async {
+    await into(syncOutbox).insert(
+      SyncOutboxCompanion.insert(
+        entity: entity,
+        entityId: entityId,
+        createdAt: createdAt,
+      ),
+    );
+  }
 
   static QueryExecutor _wrapExecutor(QueryExecutor executor) {
     if (Platform.environment.containsKey('FLUTTER_TEST') &&

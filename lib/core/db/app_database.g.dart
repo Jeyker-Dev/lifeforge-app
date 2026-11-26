@@ -471,6 +471,1342 @@ class AreasCompanion extends UpdateCompanion<AreaRow> {
   }
 }
 
+class $GoalsTable extends Goals with TableInfo<$GoalsTable, GoalRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GoalsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _areaIdMeta = const VerificationMeta('areaId');
+  @override
+  late final GeneratedColumn<String> areaId = GeneratedColumn<String>(
+    'area_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _whyMeta = const VerificationMeta('why');
+  @override
+  late final GeneratedColumn<String> why = GeneratedColumn<String>(
+    'why',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _targetDateMeta = const VerificationMeta(
+    'targetDate',
+  );
+  @override
+  late final GeneratedColumn<String> targetDate = GeneratedColumn<String>(
+    'target_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _metricCurrentMeta = const VerificationMeta(
+    'metricCurrent',
+  );
+  @override
+  late final GeneratedColumn<double> metricCurrent = GeneratedColumn<double>(
+    'metric_current',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _metricTargetMeta = const VerificationMeta(
+    'metricTarget',
+  );
+  @override
+  late final GeneratedColumn<double> metricTarget = GeneratedColumn<double>(
+    'metric_target',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _metricUnitMeta = const VerificationMeta(
+    'metricUnit',
+  );
+  @override
+  late final GeneratedColumn<String> metricUnit = GeneratedColumn<String>(
+    'metric_unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _weeklyHoursTargetMeta = const VerificationMeta(
+    'weeklyHoursTarget',
+  );
+  @override
+  late final GeneratedColumn<double> weeklyHoursTarget =
+      GeneratedColumn<double>(
+        'weekly_hours_target',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<String> deletedAt = GeneratedColumn<String>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _serverUpdatedAtMeta = const VerificationMeta(
+    'serverUpdatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> serverUpdatedAt = GeneratedColumn<String>(
+    'server_updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    areaId,
+    title,
+    why,
+    targetDate,
+    metricCurrent,
+    metricTarget,
+    metricUnit,
+    weeklyHoursTarget,
+    status,
+    updatedAt,
+    deletedAt,
+    serverUpdatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'goals';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<GoalRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('area_id')) {
+      context.handle(
+        _areaIdMeta,
+        areaId.isAcceptableOrUnknown(data['area_id']!, _areaIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_areaIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('why')) {
+      context.handle(
+        _whyMeta,
+        why.isAcceptableOrUnknown(data['why']!, _whyMeta),
+      );
+    }
+    if (data.containsKey('target_date')) {
+      context.handle(
+        _targetDateMeta,
+        targetDate.isAcceptableOrUnknown(data['target_date']!, _targetDateMeta),
+      );
+    }
+    if (data.containsKey('metric_current')) {
+      context.handle(
+        _metricCurrentMeta,
+        metricCurrent.isAcceptableOrUnknown(
+          data['metric_current']!,
+          _metricCurrentMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_metricCurrentMeta);
+    }
+    if (data.containsKey('metric_target')) {
+      context.handle(
+        _metricTargetMeta,
+        metricTarget.isAcceptableOrUnknown(
+          data['metric_target']!,
+          _metricTargetMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_metricTargetMeta);
+    }
+    if (data.containsKey('metric_unit')) {
+      context.handle(
+        _metricUnitMeta,
+        metricUnit.isAcceptableOrUnknown(data['metric_unit']!, _metricUnitMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_metricUnitMeta);
+    }
+    if (data.containsKey('weekly_hours_target')) {
+      context.handle(
+        _weeklyHoursTargetMeta,
+        weeklyHoursTarget.isAcceptableOrUnknown(
+          data['weekly_hours_target']!,
+          _weeklyHoursTargetMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_weeklyHoursTargetMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('server_updated_at')) {
+      context.handle(
+        _serverUpdatedAtMeta,
+        serverUpdatedAt.isAcceptableOrUnknown(
+          data['server_updated_at']!,
+          _serverUpdatedAtMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  GoalRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return GoalRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      areaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}area_id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      why: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}why'],
+      ),
+      targetDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}target_date'],
+      ),
+      metricCurrent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}metric_current'],
+      )!,
+      metricTarget: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}metric_target'],
+      )!,
+      metricUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metric_unit'],
+      )!,
+      weeklyHoursTarget: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weekly_hours_target'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      serverUpdatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}server_updated_at'],
+      ),
+    );
+  }
+
+  @override
+  $GoalsTable createAlias(String alias) {
+    return $GoalsTable(attachedDatabase, alias);
+  }
+}
+
+class GoalRow extends DataClass implements Insertable<GoalRow> {
+  final String id;
+  final String areaId;
+  final String title;
+  final String? why;
+  final String? targetDate;
+  final double metricCurrent;
+  final double metricTarget;
+  final String metricUnit;
+  final double weeklyHoursTarget;
+  final String status;
+  final String updatedAt;
+  final String? deletedAt;
+  final String? serverUpdatedAt;
+  const GoalRow({
+    required this.id,
+    required this.areaId,
+    required this.title,
+    this.why,
+    this.targetDate,
+    required this.metricCurrent,
+    required this.metricTarget,
+    required this.metricUnit,
+    required this.weeklyHoursTarget,
+    required this.status,
+    required this.updatedAt,
+    this.deletedAt,
+    this.serverUpdatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['area_id'] = Variable<String>(areaId);
+    map['title'] = Variable<String>(title);
+    if (!nullToAbsent || why != null) {
+      map['why'] = Variable<String>(why);
+    }
+    if (!nullToAbsent || targetDate != null) {
+      map['target_date'] = Variable<String>(targetDate);
+    }
+    map['metric_current'] = Variable<double>(metricCurrent);
+    map['metric_target'] = Variable<double>(metricTarget);
+    map['metric_unit'] = Variable<String>(metricUnit);
+    map['weekly_hours_target'] = Variable<double>(weeklyHoursTarget);
+    map['status'] = Variable<String>(status);
+    map['updated_at'] = Variable<String>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<String>(deletedAt);
+    }
+    if (!nullToAbsent || serverUpdatedAt != null) {
+      map['server_updated_at'] = Variable<String>(serverUpdatedAt);
+    }
+    return map;
+  }
+
+  GoalsCompanion toCompanion(bool nullToAbsent) {
+    return GoalsCompanion(
+      id: Value(id),
+      areaId: Value(areaId),
+      title: Value(title),
+      why: why == null && nullToAbsent ? const Value.absent() : Value(why),
+      targetDate: targetDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetDate),
+      metricCurrent: Value(metricCurrent),
+      metricTarget: Value(metricTarget),
+      metricUnit: Value(metricUnit),
+      weeklyHoursTarget: Value(weeklyHoursTarget),
+      status: Value(status),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      serverUpdatedAt: serverUpdatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverUpdatedAt),
+    );
+  }
+
+  factory GoalRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return GoalRow(
+      id: serializer.fromJson<String>(json['id']),
+      areaId: serializer.fromJson<String>(json['areaId']),
+      title: serializer.fromJson<String>(json['title']),
+      why: serializer.fromJson<String?>(json['why']),
+      targetDate: serializer.fromJson<String?>(json['targetDate']),
+      metricCurrent: serializer.fromJson<double>(json['metricCurrent']),
+      metricTarget: serializer.fromJson<double>(json['metricTarget']),
+      metricUnit: serializer.fromJson<String>(json['metricUnit']),
+      weeklyHoursTarget: serializer.fromJson<double>(json['weeklyHoursTarget']),
+      status: serializer.fromJson<String>(json['status']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+      deletedAt: serializer.fromJson<String?>(json['deletedAt']),
+      serverUpdatedAt: serializer.fromJson<String?>(json['serverUpdatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'areaId': serializer.toJson<String>(areaId),
+      'title': serializer.toJson<String>(title),
+      'why': serializer.toJson<String?>(why),
+      'targetDate': serializer.toJson<String?>(targetDate),
+      'metricCurrent': serializer.toJson<double>(metricCurrent),
+      'metricTarget': serializer.toJson<double>(metricTarget),
+      'metricUnit': serializer.toJson<String>(metricUnit),
+      'weeklyHoursTarget': serializer.toJson<double>(weeklyHoursTarget),
+      'status': serializer.toJson<String>(status),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+      'deletedAt': serializer.toJson<String?>(deletedAt),
+      'serverUpdatedAt': serializer.toJson<String?>(serverUpdatedAt),
+    };
+  }
+
+  GoalRow copyWith({
+    String? id,
+    String? areaId,
+    String? title,
+    Value<String?> why = const Value.absent(),
+    Value<String?> targetDate = const Value.absent(),
+    double? metricCurrent,
+    double? metricTarget,
+    String? metricUnit,
+    double? weeklyHoursTarget,
+    String? status,
+    String? updatedAt,
+    Value<String?> deletedAt = const Value.absent(),
+    Value<String?> serverUpdatedAt = const Value.absent(),
+  }) => GoalRow(
+    id: id ?? this.id,
+    areaId: areaId ?? this.areaId,
+    title: title ?? this.title,
+    why: why.present ? why.value : this.why,
+    targetDate: targetDate.present ? targetDate.value : this.targetDate,
+    metricCurrent: metricCurrent ?? this.metricCurrent,
+    metricTarget: metricTarget ?? this.metricTarget,
+    metricUnit: metricUnit ?? this.metricUnit,
+    weeklyHoursTarget: weeklyHoursTarget ?? this.weeklyHoursTarget,
+    status: status ?? this.status,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    serverUpdatedAt: serverUpdatedAt.present
+        ? serverUpdatedAt.value
+        : this.serverUpdatedAt,
+  );
+  GoalRow copyWithCompanion(GoalsCompanion data) {
+    return GoalRow(
+      id: data.id.present ? data.id.value : this.id,
+      areaId: data.areaId.present ? data.areaId.value : this.areaId,
+      title: data.title.present ? data.title.value : this.title,
+      why: data.why.present ? data.why.value : this.why,
+      targetDate: data.targetDate.present
+          ? data.targetDate.value
+          : this.targetDate,
+      metricCurrent: data.metricCurrent.present
+          ? data.metricCurrent.value
+          : this.metricCurrent,
+      metricTarget: data.metricTarget.present
+          ? data.metricTarget.value
+          : this.metricTarget,
+      metricUnit: data.metricUnit.present
+          ? data.metricUnit.value
+          : this.metricUnit,
+      weeklyHoursTarget: data.weeklyHoursTarget.present
+          ? data.weeklyHoursTarget.value
+          : this.weeklyHoursTarget,
+      status: data.status.present ? data.status.value : this.status,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      serverUpdatedAt: data.serverUpdatedAt.present
+          ? data.serverUpdatedAt.value
+          : this.serverUpdatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GoalRow(')
+          ..write('id: $id, ')
+          ..write('areaId: $areaId, ')
+          ..write('title: $title, ')
+          ..write('why: $why, ')
+          ..write('targetDate: $targetDate, ')
+          ..write('metricCurrent: $metricCurrent, ')
+          ..write('metricTarget: $metricTarget, ')
+          ..write('metricUnit: $metricUnit, ')
+          ..write('weeklyHoursTarget: $weeklyHoursTarget, ')
+          ..write('status: $status, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('serverUpdatedAt: $serverUpdatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    areaId,
+    title,
+    why,
+    targetDate,
+    metricCurrent,
+    metricTarget,
+    metricUnit,
+    weeklyHoursTarget,
+    status,
+    updatedAt,
+    deletedAt,
+    serverUpdatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is GoalRow &&
+          other.id == this.id &&
+          other.areaId == this.areaId &&
+          other.title == this.title &&
+          other.why == this.why &&
+          other.targetDate == this.targetDate &&
+          other.metricCurrent == this.metricCurrent &&
+          other.metricTarget == this.metricTarget &&
+          other.metricUnit == this.metricUnit &&
+          other.weeklyHoursTarget == this.weeklyHoursTarget &&
+          other.status == this.status &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.serverUpdatedAt == this.serverUpdatedAt);
+}
+
+class GoalsCompanion extends UpdateCompanion<GoalRow> {
+  final Value<String> id;
+  final Value<String> areaId;
+  final Value<String> title;
+  final Value<String?> why;
+  final Value<String?> targetDate;
+  final Value<double> metricCurrent;
+  final Value<double> metricTarget;
+  final Value<String> metricUnit;
+  final Value<double> weeklyHoursTarget;
+  final Value<String> status;
+  final Value<String> updatedAt;
+  final Value<String?> deletedAt;
+  final Value<String?> serverUpdatedAt;
+  final Value<int> rowid;
+  const GoalsCompanion({
+    this.id = const Value.absent(),
+    this.areaId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.why = const Value.absent(),
+    this.targetDate = const Value.absent(),
+    this.metricCurrent = const Value.absent(),
+    this.metricTarget = const Value.absent(),
+    this.metricUnit = const Value.absent(),
+    this.weeklyHoursTarget = const Value.absent(),
+    this.status = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.serverUpdatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  GoalsCompanion.insert({
+    required String id,
+    required String areaId,
+    required String title,
+    this.why = const Value.absent(),
+    this.targetDate = const Value.absent(),
+    required double metricCurrent,
+    required double metricTarget,
+    required String metricUnit,
+    required double weeklyHoursTarget,
+    required String status,
+    required String updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.serverUpdatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       areaId = Value(areaId),
+       title = Value(title),
+       metricCurrent = Value(metricCurrent),
+       metricTarget = Value(metricTarget),
+       metricUnit = Value(metricUnit),
+       weeklyHoursTarget = Value(weeklyHoursTarget),
+       status = Value(status),
+       updatedAt = Value(updatedAt);
+  static Insertable<GoalRow> custom({
+    Expression<String>? id,
+    Expression<String>? areaId,
+    Expression<String>? title,
+    Expression<String>? why,
+    Expression<String>? targetDate,
+    Expression<double>? metricCurrent,
+    Expression<double>? metricTarget,
+    Expression<String>? metricUnit,
+    Expression<double>? weeklyHoursTarget,
+    Expression<String>? status,
+    Expression<String>? updatedAt,
+    Expression<String>? deletedAt,
+    Expression<String>? serverUpdatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (areaId != null) 'area_id': areaId,
+      if (title != null) 'title': title,
+      if (why != null) 'why': why,
+      if (targetDate != null) 'target_date': targetDate,
+      if (metricCurrent != null) 'metric_current': metricCurrent,
+      if (metricTarget != null) 'metric_target': metricTarget,
+      if (metricUnit != null) 'metric_unit': metricUnit,
+      if (weeklyHoursTarget != null) 'weekly_hours_target': weeklyHoursTarget,
+      if (status != null) 'status': status,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (serverUpdatedAt != null) 'server_updated_at': serverUpdatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  GoalsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? areaId,
+    Value<String>? title,
+    Value<String?>? why,
+    Value<String?>? targetDate,
+    Value<double>? metricCurrent,
+    Value<double>? metricTarget,
+    Value<String>? metricUnit,
+    Value<double>? weeklyHoursTarget,
+    Value<String>? status,
+    Value<String>? updatedAt,
+    Value<String?>? deletedAt,
+    Value<String?>? serverUpdatedAt,
+    Value<int>? rowid,
+  }) {
+    return GoalsCompanion(
+      id: id ?? this.id,
+      areaId: areaId ?? this.areaId,
+      title: title ?? this.title,
+      why: why ?? this.why,
+      targetDate: targetDate ?? this.targetDate,
+      metricCurrent: metricCurrent ?? this.metricCurrent,
+      metricTarget: metricTarget ?? this.metricTarget,
+      metricUnit: metricUnit ?? this.metricUnit,
+      weeklyHoursTarget: weeklyHoursTarget ?? this.weeklyHoursTarget,
+      status: status ?? this.status,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      serverUpdatedAt: serverUpdatedAt ?? this.serverUpdatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (areaId.present) {
+      map['area_id'] = Variable<String>(areaId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (why.present) {
+      map['why'] = Variable<String>(why.value);
+    }
+    if (targetDate.present) {
+      map['target_date'] = Variable<String>(targetDate.value);
+    }
+    if (metricCurrent.present) {
+      map['metric_current'] = Variable<double>(metricCurrent.value);
+    }
+    if (metricTarget.present) {
+      map['metric_target'] = Variable<double>(metricTarget.value);
+    }
+    if (metricUnit.present) {
+      map['metric_unit'] = Variable<String>(metricUnit.value);
+    }
+    if (weeklyHoursTarget.present) {
+      map['weekly_hours_target'] = Variable<double>(weeklyHoursTarget.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<String>(deletedAt.value);
+    }
+    if (serverUpdatedAt.present) {
+      map['server_updated_at'] = Variable<String>(serverUpdatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GoalsCompanion(')
+          ..write('id: $id, ')
+          ..write('areaId: $areaId, ')
+          ..write('title: $title, ')
+          ..write('why: $why, ')
+          ..write('targetDate: $targetDate, ')
+          ..write('metricCurrent: $metricCurrent, ')
+          ..write('metricTarget: $metricTarget, ')
+          ..write('metricUnit: $metricUnit, ')
+          ..write('weeklyHoursTarget: $weeklyHoursTarget, ')
+          ..write('status: $status, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('serverUpdatedAt: $serverUpdatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $GoalActionsTable extends GoalActions
+    with TableInfo<$GoalActionsTable, GoalActionRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GoalActionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _goalIdMeta = const VerificationMeta('goalId');
+  @override
+  late final GeneratedColumn<String> goalId = GeneratedColumn<String>(
+    'goal_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _doneMeta = const VerificationMeta('done');
+  @override
+  late final GeneratedColumn<bool> done = GeneratedColumn<bool>(
+    'done',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("done" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _positionMeta = const VerificationMeta(
+    'position',
+  );
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<String> deletedAt = GeneratedColumn<String>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _serverUpdatedAtMeta = const VerificationMeta(
+    'serverUpdatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> serverUpdatedAt = GeneratedColumn<String>(
+    'server_updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    goalId,
+    title,
+    kind,
+    done,
+    position,
+    updatedAt,
+    deletedAt,
+    serverUpdatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'goal_actions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<GoalActionRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('goal_id')) {
+      context.handle(
+        _goalIdMeta,
+        goalId.isAcceptableOrUnknown(data['goal_id']!, _goalIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_goalIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('done')) {
+      context.handle(
+        _doneMeta,
+        done.isAcceptableOrUnknown(data['done']!, _doneMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_doneMeta);
+    }
+    if (data.containsKey('position')) {
+      context.handle(
+        _positionMeta,
+        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_positionMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('server_updated_at')) {
+      context.handle(
+        _serverUpdatedAtMeta,
+        serverUpdatedAt.isAcceptableOrUnknown(
+          data['server_updated_at']!,
+          _serverUpdatedAtMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  GoalActionRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return GoalActionRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      goalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}goal_id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      done: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}done'],
+      )!,
+      position: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}position'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      serverUpdatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}server_updated_at'],
+      ),
+    );
+  }
+
+  @override
+  $GoalActionsTable createAlias(String alias) {
+    return $GoalActionsTable(attachedDatabase, alias);
+  }
+}
+
+class GoalActionRow extends DataClass implements Insertable<GoalActionRow> {
+  final String id;
+  final String goalId;
+  final String title;
+  final String kind;
+  final bool done;
+  final int position;
+  final String updatedAt;
+  final String? deletedAt;
+  final String? serverUpdatedAt;
+  const GoalActionRow({
+    required this.id,
+    required this.goalId,
+    required this.title,
+    required this.kind,
+    required this.done,
+    required this.position,
+    required this.updatedAt,
+    this.deletedAt,
+    this.serverUpdatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['goal_id'] = Variable<String>(goalId);
+    map['title'] = Variable<String>(title);
+    map['kind'] = Variable<String>(kind);
+    map['done'] = Variable<bool>(done);
+    map['position'] = Variable<int>(position);
+    map['updated_at'] = Variable<String>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<String>(deletedAt);
+    }
+    if (!nullToAbsent || serverUpdatedAt != null) {
+      map['server_updated_at'] = Variable<String>(serverUpdatedAt);
+    }
+    return map;
+  }
+
+  GoalActionsCompanion toCompanion(bool nullToAbsent) {
+    return GoalActionsCompanion(
+      id: Value(id),
+      goalId: Value(goalId),
+      title: Value(title),
+      kind: Value(kind),
+      done: Value(done),
+      position: Value(position),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      serverUpdatedAt: serverUpdatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverUpdatedAt),
+    );
+  }
+
+  factory GoalActionRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return GoalActionRow(
+      id: serializer.fromJson<String>(json['id']),
+      goalId: serializer.fromJson<String>(json['goalId']),
+      title: serializer.fromJson<String>(json['title']),
+      kind: serializer.fromJson<String>(json['kind']),
+      done: serializer.fromJson<bool>(json['done']),
+      position: serializer.fromJson<int>(json['position']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+      deletedAt: serializer.fromJson<String?>(json['deletedAt']),
+      serverUpdatedAt: serializer.fromJson<String?>(json['serverUpdatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'goalId': serializer.toJson<String>(goalId),
+      'title': serializer.toJson<String>(title),
+      'kind': serializer.toJson<String>(kind),
+      'done': serializer.toJson<bool>(done),
+      'position': serializer.toJson<int>(position),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+      'deletedAt': serializer.toJson<String?>(deletedAt),
+      'serverUpdatedAt': serializer.toJson<String?>(serverUpdatedAt),
+    };
+  }
+
+  GoalActionRow copyWith({
+    String? id,
+    String? goalId,
+    String? title,
+    String? kind,
+    bool? done,
+    int? position,
+    String? updatedAt,
+    Value<String?> deletedAt = const Value.absent(),
+    Value<String?> serverUpdatedAt = const Value.absent(),
+  }) => GoalActionRow(
+    id: id ?? this.id,
+    goalId: goalId ?? this.goalId,
+    title: title ?? this.title,
+    kind: kind ?? this.kind,
+    done: done ?? this.done,
+    position: position ?? this.position,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    serverUpdatedAt: serverUpdatedAt.present
+        ? serverUpdatedAt.value
+        : this.serverUpdatedAt,
+  );
+  GoalActionRow copyWithCompanion(GoalActionsCompanion data) {
+    return GoalActionRow(
+      id: data.id.present ? data.id.value : this.id,
+      goalId: data.goalId.present ? data.goalId.value : this.goalId,
+      title: data.title.present ? data.title.value : this.title,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      done: data.done.present ? data.done.value : this.done,
+      position: data.position.present ? data.position.value : this.position,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      serverUpdatedAt: data.serverUpdatedAt.present
+          ? data.serverUpdatedAt.value
+          : this.serverUpdatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GoalActionRow(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('title: $title, ')
+          ..write('kind: $kind, ')
+          ..write('done: $done, ')
+          ..write('position: $position, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('serverUpdatedAt: $serverUpdatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    goalId,
+    title,
+    kind,
+    done,
+    position,
+    updatedAt,
+    deletedAt,
+    serverUpdatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is GoalActionRow &&
+          other.id == this.id &&
+          other.goalId == this.goalId &&
+          other.title == this.title &&
+          other.kind == this.kind &&
+          other.done == this.done &&
+          other.position == this.position &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.serverUpdatedAt == this.serverUpdatedAt);
+}
+
+class GoalActionsCompanion extends UpdateCompanion<GoalActionRow> {
+  final Value<String> id;
+  final Value<String> goalId;
+  final Value<String> title;
+  final Value<String> kind;
+  final Value<bool> done;
+  final Value<int> position;
+  final Value<String> updatedAt;
+  final Value<String?> deletedAt;
+  final Value<String?> serverUpdatedAt;
+  final Value<int> rowid;
+  const GoalActionsCompanion({
+    this.id = const Value.absent(),
+    this.goalId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.done = const Value.absent(),
+    this.position = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.serverUpdatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  GoalActionsCompanion.insert({
+    required String id,
+    required String goalId,
+    required String title,
+    required String kind,
+    required bool done,
+    required int position,
+    required String updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.serverUpdatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       goalId = Value(goalId),
+       title = Value(title),
+       kind = Value(kind),
+       done = Value(done),
+       position = Value(position),
+       updatedAt = Value(updatedAt);
+  static Insertable<GoalActionRow> custom({
+    Expression<String>? id,
+    Expression<String>? goalId,
+    Expression<String>? title,
+    Expression<String>? kind,
+    Expression<bool>? done,
+    Expression<int>? position,
+    Expression<String>? updatedAt,
+    Expression<String>? deletedAt,
+    Expression<String>? serverUpdatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (goalId != null) 'goal_id': goalId,
+      if (title != null) 'title': title,
+      if (kind != null) 'kind': kind,
+      if (done != null) 'done': done,
+      if (position != null) 'position': position,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (serverUpdatedAt != null) 'server_updated_at': serverUpdatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  GoalActionsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? goalId,
+    Value<String>? title,
+    Value<String>? kind,
+    Value<bool>? done,
+    Value<int>? position,
+    Value<String>? updatedAt,
+    Value<String?>? deletedAt,
+    Value<String?>? serverUpdatedAt,
+    Value<int>? rowid,
+  }) {
+    return GoalActionsCompanion(
+      id: id ?? this.id,
+      goalId: goalId ?? this.goalId,
+      title: title ?? this.title,
+      kind: kind ?? this.kind,
+      done: done ?? this.done,
+      position: position ?? this.position,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      serverUpdatedAt: serverUpdatedAt ?? this.serverUpdatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (goalId.present) {
+      map['goal_id'] = Variable<String>(goalId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (done.present) {
+      map['done'] = Variable<bool>(done.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<String>(deletedAt.value);
+    }
+    if (serverUpdatedAt.present) {
+      map['server_updated_at'] = Variable<String>(serverUpdatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GoalActionsCompanion(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('title: $title, ')
+          ..write('kind: $kind, ')
+          ..write('done: $done, ')
+          ..write('position: $position, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('serverUpdatedAt: $serverUpdatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SyncOutboxTable extends SyncOutbox
     with TableInfo<$SyncOutboxTable, SyncOutboxRow> {
   @override
@@ -983,6 +2319,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $AreasTable areas = $AreasTable(this);
+  late final $GoalsTable goals = $GoalsTable(this);
+  late final $GoalActionsTable goalActions = $GoalActionsTable(this);
   late final $SyncOutboxTable syncOutbox = $SyncOutboxTable(this);
   late final $SyncCursorsTable syncCursors = $SyncCursorsTable(this);
   @override
@@ -991,6 +2329,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     areas,
+    goals,
+    goalActions,
     syncOutbox,
     syncCursors,
   ];
@@ -1227,6 +2567,641 @@ typedef $$AreasTableProcessedTableManager =
       $$AreasTableUpdateCompanionBuilder,
       (AreaRow, BaseReferences<_$AppDatabase, $AreasTable, AreaRow>),
       AreaRow,
+      PrefetchHooks Function()
+    >;
+typedef $$GoalsTableCreateCompanionBuilder =
+    GoalsCompanion Function({
+      required String id,
+      required String areaId,
+      required String title,
+      Value<String?> why,
+      Value<String?> targetDate,
+      required double metricCurrent,
+      required double metricTarget,
+      required String metricUnit,
+      required double weeklyHoursTarget,
+      required String status,
+      required String updatedAt,
+      Value<String?> deletedAt,
+      Value<String?> serverUpdatedAt,
+      Value<int> rowid,
+    });
+typedef $$GoalsTableUpdateCompanionBuilder =
+    GoalsCompanion Function({
+      Value<String> id,
+      Value<String> areaId,
+      Value<String> title,
+      Value<String?> why,
+      Value<String?> targetDate,
+      Value<double> metricCurrent,
+      Value<double> metricTarget,
+      Value<String> metricUnit,
+      Value<double> weeklyHoursTarget,
+      Value<String> status,
+      Value<String> updatedAt,
+      Value<String?> deletedAt,
+      Value<String?> serverUpdatedAt,
+      Value<int> rowid,
+    });
+
+class $$GoalsTableFilterComposer extends Composer<_$AppDatabase, $GoalsTable> {
+  $$GoalsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get areaId => $composableBuilder(
+    column: $table.areaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get why => $composableBuilder(
+    column: $table.why,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get targetDate => $composableBuilder(
+    column: $table.targetDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get metricCurrent => $composableBuilder(
+    column: $table.metricCurrent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get metricTarget => $composableBuilder(
+    column: $table.metricTarget,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get metricUnit => $composableBuilder(
+    column: $table.metricUnit,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get weeklyHoursTarget => $composableBuilder(
+    column: $table.weeklyHoursTarget,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get serverUpdatedAt => $composableBuilder(
+    column: $table.serverUpdatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$GoalsTableOrderingComposer
+    extends Composer<_$AppDatabase, $GoalsTable> {
+  $$GoalsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get areaId => $composableBuilder(
+    column: $table.areaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get why => $composableBuilder(
+    column: $table.why,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get targetDate => $composableBuilder(
+    column: $table.targetDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get metricCurrent => $composableBuilder(
+    column: $table.metricCurrent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get metricTarget => $composableBuilder(
+    column: $table.metricTarget,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get metricUnit => $composableBuilder(
+    column: $table.metricUnit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get weeklyHoursTarget => $composableBuilder(
+    column: $table.weeklyHoursTarget,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get serverUpdatedAt => $composableBuilder(
+    column: $table.serverUpdatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$GoalsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $GoalsTable> {
+  $$GoalsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get areaId =>
+      $composableBuilder(column: $table.areaId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get why =>
+      $composableBuilder(column: $table.why, builder: (column) => column);
+
+  GeneratedColumn<String> get targetDate => $composableBuilder(
+    column: $table.targetDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get metricCurrent => $composableBuilder(
+    column: $table.metricCurrent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get metricTarget => $composableBuilder(
+    column: $table.metricTarget,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get metricUnit => $composableBuilder(
+    column: $table.metricUnit,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get weeklyHoursTarget => $composableBuilder(
+    column: $table.weeklyHoursTarget,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get serverUpdatedAt => $composableBuilder(
+    column: $table.serverUpdatedAt,
+    builder: (column) => column,
+  );
+}
+
+class $$GoalsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $GoalsTable,
+          GoalRow,
+          $$GoalsTableFilterComposer,
+          $$GoalsTableOrderingComposer,
+          $$GoalsTableAnnotationComposer,
+          $$GoalsTableCreateCompanionBuilder,
+          $$GoalsTableUpdateCompanionBuilder,
+          (GoalRow, BaseReferences<_$AppDatabase, $GoalsTable, GoalRow>),
+          GoalRow,
+          PrefetchHooks Function()
+        > {
+  $$GoalsTableTableManager(_$AppDatabase db, $GoalsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GoalsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GoalsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GoalsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> areaId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String?> why = const Value.absent(),
+                Value<String?> targetDate = const Value.absent(),
+                Value<double> metricCurrent = const Value.absent(),
+                Value<double> metricTarget = const Value.absent(),
+                Value<String> metricUnit = const Value.absent(),
+                Value<double> weeklyHoursTarget = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+                Value<String?> deletedAt = const Value.absent(),
+                Value<String?> serverUpdatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GoalsCompanion(
+                id: id,
+                areaId: areaId,
+                title: title,
+                why: why,
+                targetDate: targetDate,
+                metricCurrent: metricCurrent,
+                metricTarget: metricTarget,
+                metricUnit: metricUnit,
+                weeklyHoursTarget: weeklyHoursTarget,
+                status: status,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                serverUpdatedAt: serverUpdatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String areaId,
+                required String title,
+                Value<String?> why = const Value.absent(),
+                Value<String?> targetDate = const Value.absent(),
+                required double metricCurrent,
+                required double metricTarget,
+                required String metricUnit,
+                required double weeklyHoursTarget,
+                required String status,
+                required String updatedAt,
+                Value<String?> deletedAt = const Value.absent(),
+                Value<String?> serverUpdatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GoalsCompanion.insert(
+                id: id,
+                areaId: areaId,
+                title: title,
+                why: why,
+                targetDate: targetDate,
+                metricCurrent: metricCurrent,
+                metricTarget: metricTarget,
+                metricUnit: metricUnit,
+                weeklyHoursTarget: weeklyHoursTarget,
+                status: status,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                serverUpdatedAt: serverUpdatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$GoalsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $GoalsTable,
+      GoalRow,
+      $$GoalsTableFilterComposer,
+      $$GoalsTableOrderingComposer,
+      $$GoalsTableAnnotationComposer,
+      $$GoalsTableCreateCompanionBuilder,
+      $$GoalsTableUpdateCompanionBuilder,
+      (GoalRow, BaseReferences<_$AppDatabase, $GoalsTable, GoalRow>),
+      GoalRow,
+      PrefetchHooks Function()
+    >;
+typedef $$GoalActionsTableCreateCompanionBuilder =
+    GoalActionsCompanion Function({
+      required String id,
+      required String goalId,
+      required String title,
+      required String kind,
+      required bool done,
+      required int position,
+      required String updatedAt,
+      Value<String?> deletedAt,
+      Value<String?> serverUpdatedAt,
+      Value<int> rowid,
+    });
+typedef $$GoalActionsTableUpdateCompanionBuilder =
+    GoalActionsCompanion Function({
+      Value<String> id,
+      Value<String> goalId,
+      Value<String> title,
+      Value<String> kind,
+      Value<bool> done,
+      Value<int> position,
+      Value<String> updatedAt,
+      Value<String?> deletedAt,
+      Value<String?> serverUpdatedAt,
+      Value<int> rowid,
+    });
+
+class $$GoalActionsTableFilterComposer
+    extends Composer<_$AppDatabase, $GoalActionsTable> {
+  $$GoalActionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get goalId => $composableBuilder(
+    column: $table.goalId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get done => $composableBuilder(
+    column: $table.done,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get serverUpdatedAt => $composableBuilder(
+    column: $table.serverUpdatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$GoalActionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $GoalActionsTable> {
+  $$GoalActionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get goalId => $composableBuilder(
+    column: $table.goalId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get done => $composableBuilder(
+    column: $table.done,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get serverUpdatedAt => $composableBuilder(
+    column: $table.serverUpdatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$GoalActionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $GoalActionsTable> {
+  $$GoalActionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get goalId =>
+      $composableBuilder(column: $table.goalId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<bool> get done =>
+      $composableBuilder(column: $table.done, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+
+  GeneratedColumn<String> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get serverUpdatedAt => $composableBuilder(
+    column: $table.serverUpdatedAt,
+    builder: (column) => column,
+  );
+}
+
+class $$GoalActionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $GoalActionsTable,
+          GoalActionRow,
+          $$GoalActionsTableFilterComposer,
+          $$GoalActionsTableOrderingComposer,
+          $$GoalActionsTableAnnotationComposer,
+          $$GoalActionsTableCreateCompanionBuilder,
+          $$GoalActionsTableUpdateCompanionBuilder,
+          (
+            GoalActionRow,
+            BaseReferences<_$AppDatabase, $GoalActionsTable, GoalActionRow>,
+          ),
+          GoalActionRow,
+          PrefetchHooks Function()
+        > {
+  $$GoalActionsTableTableManager(_$AppDatabase db, $GoalActionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GoalActionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GoalActionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GoalActionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> goalId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<bool> done = const Value.absent(),
+                Value<int> position = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+                Value<String?> deletedAt = const Value.absent(),
+                Value<String?> serverUpdatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GoalActionsCompanion(
+                id: id,
+                goalId: goalId,
+                title: title,
+                kind: kind,
+                done: done,
+                position: position,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                serverUpdatedAt: serverUpdatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String goalId,
+                required String title,
+                required String kind,
+                required bool done,
+                required int position,
+                required String updatedAt,
+                Value<String?> deletedAt = const Value.absent(),
+                Value<String?> serverUpdatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GoalActionsCompanion.insert(
+                id: id,
+                goalId: goalId,
+                title: title,
+                kind: kind,
+                done: done,
+                position: position,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                serverUpdatedAt: serverUpdatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$GoalActionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $GoalActionsTable,
+      GoalActionRow,
+      $$GoalActionsTableFilterComposer,
+      $$GoalActionsTableOrderingComposer,
+      $$GoalActionsTableAnnotationComposer,
+      $$GoalActionsTableCreateCompanionBuilder,
+      $$GoalActionsTableUpdateCompanionBuilder,
+      (
+        GoalActionRow,
+        BaseReferences<_$AppDatabase, $GoalActionsTable, GoalActionRow>,
+      ),
+      GoalActionRow,
       PrefetchHooks Function()
     >;
 typedef $$SyncOutboxTableCreateCompanionBuilder =
@@ -1553,6 +3528,10 @@ class $AppDatabaseManager {
   $AppDatabaseManager(this._db);
   $$AreasTableTableManager get areas =>
       $$AreasTableTableManager(_db, _db.areas);
+  $$GoalsTableTableManager get goals =>
+      $$GoalsTableTableManager(_db, _db.goals);
+  $$GoalActionsTableTableManager get goalActions =>
+      $$GoalActionsTableTableManager(_db, _db.goalActions);
   $$SyncOutboxTableTableManager get syncOutbox =>
       $$SyncOutboxTableTableManager(_db, _db.syncOutbox);
   $$SyncCursorsTableTableManager get syncCursors =>

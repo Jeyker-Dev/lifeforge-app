@@ -46,10 +46,20 @@ lib/
 
 ## Flujo de datos
 
-1. La app escribe primero en Drift y encola el cambio en `core/sync`.
-2. Con conexión, la cola envía los cambios a la API; la API responde con el estado canónico.
-3. La app actualiza Drift con la respuesta del servidor.
-4. Conflictos: gana la última edición según `updated_at`; los registros de tiempo solo se agregan y nunca se sobrescriben; los borrados son lógicos (`deleted_at`). Ver [ADR-002](decisions/ADR-002-sync-conflict-rule.md).
+1. La app escribe primero en Drift y encola el cambio en `core/sync` (`sync_outbox`).
+2. Con conexión, `SyncService` ejecuta un ciclo único a la vez (`_inFlight`) en orden: primero empuja el outbox pendiente (`areas` → `goals` → `goal_actions`) y luego descarga cambios por cursor individual en `sync_cursors` en el mismo orden (`areas` → `goals` → `goal_actions`).
+3. La app actualiza Drift con la respuesta canónica del servidor; entradas inválidas (4xx/422) se descartan del outbox conservando la fila local.
+4. Conflictos: gana la última edición según `updated_at` (un empate conserva la versión local); los registros de tiempo solo se agregan y nunca se sobrescriben; los borrados son lógicos (`deleted_at`). Borrar una meta en el cliente marca `deleted_at` también en sus acciones activas y encola un borrado por cada una. Ver [ADR-002](decisions/ADR-002-sync-conflict-rule.md).
+
+### Tablas locales en Drift (`AppDatabase`)
+
+| Tabla | Propósito |
+|---|---|
+| `areas` | Caché local de áreas de vida. |
+| `goals` | Caché local de metas por área (métrica, horas semanales objetivo, estado). |
+| `goal_actions` | Caché local de tareas e hitos ordenados por `position` dentro de cada meta. |
+| `sync_outbox` | Cola de cambios locales pendientes de envío por entidad (`area`, `goal`, `goal_action`). |
+| `sync_cursors` | Último `server_updated_at` recibido por entidad para pulls incrementales. |
 
 ## Convenciones críticas
 

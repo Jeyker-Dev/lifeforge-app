@@ -91,26 +91,36 @@ class DriftAreaRepository implements AreaRepository {
   }
 
   @override
-  Future<void> rename({required String id, required String name}) async {
-    final nowIso = _nowUtc().toIso8601String();
-    await _db.transaction(() async {
-      final count = await (_db.update(_db.areas)..where((t) => t.id.equals(id)))
-          .write(AreasCompanion(name: Value(name), updatedAt: Value(nowIso)));
-      if (count > 0) {
-        await _enqueueOutbox(id, nowIso);
-      }
-    });
-    _onWrite?.call();
-  }
+  Future<void> rename({required String id, required String name}) =>
+      _updateArea(
+        id,
+        (nowIso) => AreasCompanion(name: Value(name), updatedAt: Value(nowIso)),
+      );
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> changeColor({required String id, required String color}) =>
+      _updateArea(
+        id,
+        (nowIso) =>
+            AreasCompanion(color: Value(color), updatedAt: Value(nowIso)),
+      );
+
+  @override
+  Future<void> delete(String id) => _updateArea(
+    id,
+    (nowIso) =>
+        AreasCompanion(deletedAt: Value(nowIso), updatedAt: Value(nowIso)),
+  );
+
+  Future<void> _updateArea(
+    String id,
+    AreasCompanion Function(String nowIso) buildCompanion,
+  ) async {
     final nowIso = _nowUtc().toIso8601String();
     await _db.transaction(() async {
-      final count = await (_db.update(_db.areas)..where((t) => t.id.equals(id)))
-          .write(
-            AreasCompanion(deletedAt: Value(nowIso), updatedAt: Value(nowIso)),
-          );
+      final count = await (_db.update(
+        _db.areas,
+      )..where((t) => t.id.equals(id))).write(buildCompanion(nowIso));
       if (count > 0) {
         await _enqueueOutbox(id, nowIso);
       }
@@ -118,17 +128,12 @@ class DriftAreaRepository implements AreaRepository {
     _onWrite?.call();
   }
 
-  Future<void> _enqueueOutbox(String entityId, String createdAt) async {
-    await _db
-        .into(_db.syncOutbox)
-        .insert(
-          SyncOutboxCompanion.insert(
-            entity: entityName,
-            entityId: entityId,
-            createdAt: createdAt,
-          ),
-        );
-  }
+  Future<void> _enqueueOutbox(String entityId, String createdAt) =>
+      _db.enqueueOutbox(
+        entity: entityName,
+        entityId: entityId,
+        createdAt: createdAt,
+      );
 
   Area _rowToArea(QueryRow row) {
     final deletedAt = row.readNullable<String>('deleted_at');

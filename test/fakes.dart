@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:lifeforge/features/areas/data/areas_remote.dart';
 import 'package:lifeforge/features/auth/domain/auth.dart';
+import 'package:lifeforge/features/goals/data/goal_actions_remote.dart';
+import 'package:lifeforge/features/goals/data/goals_remote.dart';
 
 class InMemoryTokenStore implements TokenStore {
   InMemoryTokenStore([this.tokens]);
@@ -88,5 +90,92 @@ class FakeAreasRemote implements AreasRemote {
     pulledSince.add(since);
     if (pullError != null) throw pullError!;
     return AreasPullResponse(areas: pullResponseAreas, cursor: nextCursor);
+  }
+}
+
+class FakeGoalsRemote implements GoalsRemote {
+  Exception? putError;
+  Exception? pullError;
+  Completer<void>? putGate;
+  final List<GoalPushPayload> pushed = [];
+  final List<String?> pulledSince = [];
+  final Map<String, RemoteGoal> serverGoals = {};
+  List<RemoteGoal> pullResponseGoals = [];
+  String? nextCursor;
+  RemoteGoal Function(GoalPushPayload payload)? onPut;
+
+  @override
+  Future<RemoteGoal> putGoal(GoalPushPayload payload) async {
+    pushed.add(payload);
+    await putGate?.future;
+    if (putError != null) throw putError!;
+    if (onPut != null) return onPut!(payload);
+    final saved = RemoteGoal(
+      id: payload.id,
+      areaId: payload.areaId,
+      title: payload.title,
+      why: payload.why,
+      targetDate: payload.targetDate,
+      metricCurrent: payload.metricCurrent,
+      metricTarget: payload.metricTarget,
+      metricUnit: payload.metricUnit,
+      weeklyHoursTarget: payload.weeklyHoursTarget,
+      status: payload.status,
+      updatedAt: payload.updatedAt,
+      deletedAt: payload.deletedAt,
+      serverUpdatedAt: '2026-11-24T12:05:00.000Z',
+    );
+    serverGoals[payload.id] = saved;
+    return saved;
+  }
+
+  @override
+  Future<GoalsPullResponse> pullGoals({String? since}) async {
+    pulledSince.add(since);
+    if (pullError != null) throw pullError!;
+    return GoalsPullResponse(goals: pullResponseGoals, cursor: nextCursor);
+  }
+}
+
+class FakeGoalActionsRemote implements GoalActionsRemote {
+  Exception? putError;
+  Exception? pullError;
+  Completer<void>? putGate;
+  final List<GoalActionPushPayload> pushed = [];
+  final List<String?> pulledSince = [];
+  final Map<String, RemoteGoalAction> serverActions = {};
+  List<RemoteGoalAction> pullResponseActions = [];
+  String? nextCursor;
+  RemoteGoalAction Function(GoalActionPushPayload payload)? onPut;
+
+  @override
+  Future<RemoteGoalAction> putGoalAction(GoalActionPushPayload payload) async {
+    pushed.add(payload);
+    await putGate?.future;
+    if (putError != null) throw putError!;
+    if (onPut != null) return onPut!(payload);
+    final saved = RemoteGoalAction(
+      id: payload.id,
+      goalId: payload.goalId,
+      title: payload.title,
+      kind: payload.kind,
+      done: payload.done,
+      position: payload.position,
+      updatedAt: payload.updatedAt,
+      deletedAt: payload.deletedAt,
+      serverUpdatedAt: '2026-11-24T12:05:00.000Z',
+    );
+    serverActions[payload.id] = saved;
+    return saved;
+  }
+
+  @override
+  Future<GoalActionsPullResponse> pullGoalActions({String? since}) async {
+    pulledSince.add(since);
+    if (pullError != null) throw pullError!;
+    return GoalActionsPullResponse(
+      goalActions: pullResponseActions,
+      cursor: nextCursor,
+    );
   }
 }
